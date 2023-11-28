@@ -18,6 +18,7 @@ import {
   useColorScheme,
   View,
   FlatList,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
@@ -28,10 +29,20 @@ const App = () => {
   const isInputEmpty = newTask.trim() === '';
 
   const handleCreateButtonPress = () => {
-    if (!isInputEmpty) {
+    if (!isInputEmpty && tasksList.length < 10) {
       setTaskList(prevTasks => [...prevTasks, newTask]);
       setNewTask('');
+    } else {
+      Alert.alert('prioritize tasks first');
     }
+  };
+
+  const deleteTaskPress = index => {
+    setTaskList(prevTasks => {
+      const updatedTaskList = [...prevTasks];
+      updatedTaskList.splice(index, 1);
+      return updatedTaskList;
+    });
   };
 
   return (
@@ -73,9 +84,9 @@ const App = () => {
             width: '100%',
             // borderWidth: 1,
           }}
-          renderItem={({item}) => (
+          renderItem={({item, index}) => (
             <View style={{padding: 5}}>
-              <Task value={item} />
+              <Task item={item} index={index} onDelete={deleteTaskPress} />
             </View>
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -85,7 +96,7 @@ const App = () => {
   );
 };
 
-const Task = taskItem => {
+const Task = ({item, index, onDelete}) => {
   return (
     <View
       style={{
@@ -107,7 +118,7 @@ const Task = taskItem => {
           justifyContent: 'center',
           alignItems: 'flex-start',
         }}>
-        <Text style={{color: 'black', fontSize: 20}}>{taskItem.value}</Text>
+        <Text style={{color: 'black', fontSize: 20}}>{item}</Text>
       </View>
       <View
         style={{
@@ -123,7 +134,8 @@ const Task = taskItem => {
             alignItems: 'center',
             justifyContent: 'center',
             height: 50,
-          }}>
+          }}
+          onPress={() => onDelete(index)}>
           <Icon name="trash" size={30} color={'black'} />
         </TouchableOpacity>
       </View>
