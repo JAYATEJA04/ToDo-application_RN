@@ -17,38 +17,90 @@ import {
   TextInput,
   useColorScheme,
   View,
+  FlatList,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const App = () => {
   const [newTask, setNewTask] = useState('');
-  const [createButtonState, setCreateButtonState] = useState(false);
+  const [tasksList, setTaskList] = useState([]);
+
+  const isInputEmpty = newTask.trim() === '';
 
   const handleCreateButtonPress = () => {
-    setCreateButtonState(true);
+    if (!isInputEmpty) {
+      setTaskList(prevTasks => [...prevTasks, newTask]);
+      setNewTask('');
+    }
   };
 
   return (
     <View style={styles.container}>
       {/* <Text style={{color: 'pink'}}>Hello world</Text> */}
       <TextInput
-        placeholder="Enter new task"
-        placeholderTextColor={'black'}
+        placeholder="Add your new task...."
+        placeholderTextColor={'grey'}
         style={styles.formInput}
         value={newTask}
         onChangeText={txt => setNewTask(txt)}
       />
-      <TouchableOpacity
-        style={styles.createTaskButton}
-        onPress={handleCreateButtonPress}>
-        <Text>Create Task</Text>
-      </TouchableOpacity>
-      <View style={{top: 10}}>
-        {createButtonState ? (
-          <View>
-            <Text style={{color: 'white'}}>hi</Text>
-          </View>
-        ) : null}
+      <View style={{padding: 10}}>
+        <TouchableOpacity
+          style={styles.createTaskButton}
+          onPress={handleCreateButtonPress}>
+          <Text>Create Task</Text>
+        </TouchableOpacity>
       </View>
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          padding: 10,
+          // justifyContent: 'center',
+          alignItems: 'flex-start',
+          // borderWidth: 1,
+        }}>
+        <FlatList
+          data={tasksList}
+          contentContainerStyle={
+            {
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // borderWidth: 1,
+            }
+          }
+          style={{
+            width: '100%',
+            // borderWidth: 1,
+          }}
+          renderItem={({item}) => (
+            <View style={{padding: 5}}>
+              <Task value={item} />
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+    </View>
+  );
+};
+
+const Task = taskItem => {
+  return (
+    <View
+      style={{
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        flex: 1,
+        height: 60,
+        padding: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: '#E0F4FF',
+        flexDirection: 'row',
+      }}>
+      {/* <Text style={{color: 'black'}}>{taskItem.value}</Text> */}
+      <Icon name="heart" size={40} />
     </View>
   );
 };
@@ -57,8 +109,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    justifyContent: 'flex-start',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   formInput: {
     padding: 10,
@@ -71,7 +123,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   createTaskButton: {
-    top: 10,
     padding: 10,
     height: 50,
     width: 200,
