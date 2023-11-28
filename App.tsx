@@ -19,7 +19,7 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const App = () => {
   const [newTask, setNewTask] = useState('');
@@ -89,18 +89,44 @@ const Task = taskItem => {
   return (
     <View
       style={{
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        justifyContent: 'center',
+        alignItems: 'center',
         flex: 1,
-        height: 60,
-        padding: 10,
+        height: 'auto',
+        padding: 5,
         borderWidth: 1,
         borderRadius: 10,
         backgroundColor: '#E0F4FF',
         flexDirection: 'row',
       }}>
-      {/* <Text style={{color: 'black'}}>{taskItem.value}</Text> */}
-      <Icon name="heart" size={40} />
+      <View
+        style={{
+          flex: 5,
+          height: 'auto',
+          // borderWidth: 1,
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+        }}>
+        <Text style={{color: 'black', fontSize: 20}}>{taskItem.value}</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          padding: 5,
+          // borderWidth: 1,
+        }}>
+        <TouchableOpacity
+          style={{
+            elevation: 10,
+            backgroundColor: '#7B66FF',
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 50,
+          }}>
+          <Icon name="trash" size={30} color={'black'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
