@@ -36,40 +36,32 @@ const MainUI = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Add your new task...."
-        placeholderTextColor={'grey'}
-        style={styles.formInput}
-        value={newTask}
-        onChangeText={txt => setNewTask(txt)}
-      />
-      <View style={{padding: 10}}>
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <TextInput
+          placeholder="Add your new task...."
+          placeholderTextColor={'grey'}
+          style={styles.formInput}
+          value={newTask}
+          onChangeText={txt => setNewTask(txt)}
+        />
+      </View>
+      <View
+        style={{padding: 10, alignItems: 'center', justifyContent: 'center'}}>
         <TouchableOpacity
           style={styles.createTaskButton}
           onPress={handleCreateButtonPress}>
           <Text>Create Task</Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          flex: 1,
-          width: '100%',
-          padding: 10,
-          alignItems: 'flex-start',
-        }}>
-        <FlatList
-          data={tasksList}
-          style={{
-            width: '100%',
-          }}
-          renderItem={({item, index}) => (
-            <View style={{padding: 5}}>
-              <Task item={item} index={index} onDelete={deleteTaskPress} />
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <FlatList
+        data={tasksList}
+        renderItem={({item, index}) => (
+          <Task item={item} index={index} onDelete={deleteTaskPress} />
+        )}
+        key={'_'}
+        keyExtractor={index => '_' + index.toString()}
+        numColumns={2}
+      />
     </View>
   );
 };
@@ -78,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    alignItems: 'center',
+    // alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#E0F4FF',
   },

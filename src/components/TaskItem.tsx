@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 'auto',
     padding: 5,
+    margin: 5,
     borderRadius: 10,
     backgroundColor: '#FBECB2',
     flexDirection: 'row',
@@ -44,18 +45,14 @@ const styles = StyleSheet.create({
   },
   DeleteButtonView: {
     flex: 1,
-    padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   DeleteButton: {
     elevation: 10,
     backgroundColor: '#7B66FF',
     borderRadius: 10,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     height: 40,
-    width: '70%',
   },
 });
 
