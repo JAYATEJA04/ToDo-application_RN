@@ -1,10 +1,11 @@
-import React, {useRef} from 'react';
-import {Animated, PanResponder, StyleSheet, View} from 'react-native';
-import {
-  useSharedValue,
+import 'react-native-gesture-handler';
+import React, {useRef, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+import Animated, {
   useAnimatedStyle,
-  withTiming,
+  useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import {
   Gesture,
@@ -12,139 +13,68 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
-const Animate = () => {
-  const pan = useRef(new Animated.ValueXY()).current;
+export default function App() {
+  const pressed = useSharedValue(false);
+  // highlight-next-line
+  const initialX = useSharedValue(0);
+  const initialY = useSharedValue(0);
+  const offsetX = useRef(useSharedValue(0)).current;
+  const offsetY = useRef(useSharedValue(0)).current;
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
-        useNativeDriver: false,
+  const pan = useRef(
+    Gesture.Pan()
+      .onBegin(() => {
+        pressed.value = true;
+      })
+      .onChange(event => {
+        offsetX.value = initialX.value + event.translationX;
+        offsetY.value = initialY.value + event.translationY;
+      })
+      .onFinalize(() => {
+        pressed.value = false;
+        initialX.value = offsetX.value;
+        initialY.value = offsetY.value;
       }),
-      onPanResponderRelease: () => {
-        pan.extractOffset();
-      },
-    }),
   ).current;
 
+  useEffect(() => {
+    // Reset initial position on each render
+    initialX.value = 0;
+    initialY.value = 0;
+  }, []);
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [
+      // highlight-next-line
+      {translateX: withSpring(offsetX.value)},
+      {translateY: withSpring(offsetY.value)},
+      {scale: withTiming(pressed.value ? 1.2 : 1)},
+    ],
+    backgroundColor: pressed.value ? '#FFE04B' : '#b58df1',
+  }));
+
   return (
-    <View style={styles.container}>
-      <Animated.View
-        style={{
-          transform: [{translateX: pan.x}, {translateY: pan.y}],
-        }}
-        {...panResponder.panHandlers}>
-        <View style={styles.ball} />
-      </Animated.View>
-    </View>
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.container}>
+        <GestureDetector gesture={pan}>
+          <Animated.View style={[styles.circle, animatedStyles]} />
+        </GestureDetector>
+      </View>
+    </GestureHandlerRootView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-  },
-  ball: {
-    height: 120,
-    width: 120,
-    backgroundColor: '#b58df1',
-    borderRadius: 20,
-  },
-});
-
-export default Animate;
-import React from 'react';
-import {Text, View, Button, StyleSheet} from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  useEvent,
-} from 'react-native-reanimated';
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-  PanGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
-
-const Animate = () => {
-  const translationX1 = useSharedValue(0);
-  const translationY1 = useSharedValue(0);
-  const translationX2 = useSharedValue(0);
-  const translationY2 = useSharedValue(0);
-
-  const box1Style = useAnimatedStyle(() => ({
-    transform: [
-      {translateX: translationX1.value},
-      {translateY: translationY1.value},
-    ],
-  }));
-
-  const box2Style = useAnimatedStyle(() => ({
-    transform: [
-      {translateX: translationX2.value},
-      {translateY: translationY2.value},
-    ],
-  }));
-
-  const onGestureEvent1 = Animated.event([
-    {nativeEvent: {translationX: translationX1, translationY: translationY1}},
-    {useNativeDriver: false},
-  ]);
-
-  const onGestureEvent2 = Animated.event([
-    {nativeEvent: {translationX: translationX2, translationY: translationY1}},
-    {useNativeDriver: false},
-  ]);
-
-  const onRelease1 = ({nativeEvent}) => {
-    if (nativeEvent.state === State.END) {
-      translationX1.value = withSpring(0);
-      translationY1.value = withSpring(0);
-    }
-  };
-
-  const onRelease2 = ({nativeEvent}) => {
-    if (nativeEvent.state === State.END) {
-      translationX2.value = withSpring(0);
-      translationY2.value = withSpring(0);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <PanGestureHandler
-        onGestureEvent={onGestureEvent1}
-        onHandlerStateChange={onRelease1}>
-        <Animated.View style={[styles.circle, box1Style]} />
-      </PanGestureHandler>
-      <PanGestureHandler
-        onGestureEvent={onGestureEvent2}
-        onHandlerStateChange={onRelease2}>
-        <Animated.View style={[styles.circle, box2Style]} />
-      </PanGestureHandler>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
     height: '100%',
   },
   circle: {
-    height: 220,
-    width: 180,
+    height: 120,
+    width: 120,
     backgroundColor: '#b58df1',
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 50,
   },
 });
-
-export default Animate;
