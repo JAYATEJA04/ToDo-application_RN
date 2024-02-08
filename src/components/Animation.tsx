@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useRef, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, useWindowDimensions} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -13,13 +13,20 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
-export default function App() {
+const GRID_SIZE = 120;
+
+const Animate = () => {
   const pressed = useSharedValue(false);
   // highlight-next-line
   const initialX = useSharedValue(0);
   const initialY = useSharedValue(0);
   const offsetX = useRef(useSharedValue(0)).current;
   const offsetY = useRef(useSharedValue(0)).current;
+
+  const snapToGrid = (value, gridSize) => {
+    'worklet';
+    return Math.round(value / gridSize) * gridSize;
+  };
 
   const pan = useRef(
     Gesture.Pan()
@@ -32,8 +39,10 @@ export default function App() {
       })
       .onFinalize(() => {
         pressed.value = false;
-        initialX.value = offsetX.value;
-        initialY.value = offsetY.value;
+        initialX.value = snapToGrid(offsetX.value, GRID_SIZE);
+        initialY.value = snapToGrid(offsetY.value, GRID_SIZE);
+        offsetX.value = initialX.value;
+        offsetY.value = initialY.value;
       }),
   ).current;
 
@@ -48,7 +57,7 @@ export default function App() {
       // highlight-next-line
       {translateX: withSpring(offsetX.value)},
       {translateY: withSpring(offsetY.value)},
-      {scale: withTiming(pressed.value ? 1.2 : 1)},
+      {scale: withTiming(pressed.value ? 1.1 : 1)},
     ],
     backgroundColor: pressed.value ? '#FFE04B' : '#b58df1',
   }));
@@ -62,7 +71,7 @@ export default function App() {
       </View>
     </GestureHandlerRootView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -70,11 +79,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    padding: 10,
   },
   circle: {
-    height: 120,
-    width: 120,
+    height: 220,
+    width: 170,
     backgroundColor: '#b58df1',
-    borderRadius: 50,
+    borderRadius: 10,
   },
 });
+
+export default Animate;
