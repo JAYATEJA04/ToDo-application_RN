@@ -1,4 +1,3 @@
-import 'react-native-gesture-handler';
 import React, {useRef, useEffect} from 'react';
 import {StyleSheet, View, useWindowDimensions} from 'react-native';
 import Animated, {
@@ -13,7 +12,7 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
-const GRID_SIZE = 120;
+const GRID_SIZE = 200;
 
 const Animate = () => {
   const pressed = useSharedValue(false);
@@ -22,6 +21,7 @@ const Animate = () => {
   const initialY = useSharedValue(0);
   const offsetX = useRef(useSharedValue(0)).current;
   const offsetY = useRef(useSharedValue(0)).current;
+  const {width: screenWidth, height: screenHeight} = useWindowDimensions();
 
   const snapToGrid = (value, gridSize) => {
     'worklet';
@@ -34,8 +34,15 @@ const Animate = () => {
         pressed.value = true;
       })
       .onChange(event => {
-        offsetX.value = initialX.value + event.translationX;
-        offsetY.value = initialY.value + event.translationY;
+        const x = initialX.value + event.translationX;
+        const y = initialY.value + event.translationY;
+        const minX = 0;
+        const minY = 0;
+        const maxX = screenWidth - GRID_SIZE;
+        const maxY = screenHeight - GRID_SIZE;
+
+        offsetX.value = Math.min(Math.max(x, minX), maxX);
+        offsetY.value = Math.min(Math.max(y, minY), maxY);
       })
       .onFinalize(() => {
         pressed.value = false;
@@ -76,10 +83,9 @@ const Animate = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
     padding: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
   },
   circle: {
     height: 220,
