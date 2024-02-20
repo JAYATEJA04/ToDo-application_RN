@@ -8,7 +8,6 @@ const App = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Animate />
-      {/* <RenderCard /> */}
     </GestureHandlerRootView>
   );
 };
