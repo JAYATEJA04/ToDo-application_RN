@@ -27,13 +27,13 @@ const Animate = () => {
         pressed.value = true;
       })
       .onChange(event => {
-        offsetX.value = event.translationX;
-        offsetY.value = event.translationY;
+        offsetX.value = initialX.value + event.translationX;
+        offsetY.value = initialY.value + event.translationY;
       })
       .onFinalize(() => {
         pressed.value = false;
-        offsetX.value = initialX.value;
-        offsetY.value = initialY.value;
+        initialX.value = offsetX.value;
+        initialY.value = offsetY.value;
       }),
   ).current;
 
