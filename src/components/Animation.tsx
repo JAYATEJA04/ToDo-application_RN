@@ -48,26 +48,23 @@ const Animate = () => {
       {translateY: withSpring(offsetY.value)},
       {scale: withTiming(pressed.value ? 1.2 : 1)},
     ],
-    backgroundColor: pressed.value ? 'orange' : 'yellow',
+    backgroundColor: pressed.value ? 'orange' : '#265073',
   }));
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <View style={styles.container}>
-        <GestureDetector gesture={gesture}>
-          <Animated.View style={[styles.circle, animatedStyles]} />
-        </GestureDetector>
-      </View>
-    </GestureHandlerRootView>
+    <View style={styles.container}>
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={[styles.circle, animatedStyles]} />
+      </GestureDetector>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: 'white',
-    borderWidth: 1,
+    // padding: 10,
+    // backgroundColor: 'white',
   },
   circle: {
     height: 220,

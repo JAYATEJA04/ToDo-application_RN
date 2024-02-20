@@ -7,7 +7,11 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const App = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
-      <Animate />
+      <View>
+        <Animate />
+        <Animate />
+        <Animate />
+      </View>
     </GestureHandlerRootView>
   );
 };
@@ -17,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: 'white',
-    borderWidth: 1,
+    flexDirection: 'column',
   },
 });
 
