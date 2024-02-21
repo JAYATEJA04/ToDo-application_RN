@@ -46,7 +46,7 @@ const Animate = () => {
     transform: [
       {translateX: withSpring(offsetX.value)},
       {translateY: withSpring(offsetY.value)},
-      {scale: withTiming(pressed.value ? 1.2 : 1)},
+      {scale: withTiming(pressed.value ? 1.1 : 1)},
     ],
     backgroundColor: pressed.value ? 'orange' : '#265073',
   }));
@@ -62,13 +62,12 @@ const Animate = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // padding: 10,
-    // backgroundColor: 'white',
+    // flex: 1,
+    borderWidth: 1,
   },
   circle: {
-    height: 220,
-    width: 170,
+    height: 150,
+    width: 150,
     backgroundColor: '#b58df1',
     borderRadius: 10,
   },
