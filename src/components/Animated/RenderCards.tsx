@@ -8,7 +8,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import Animate from '../Animation';
+import AnimationCard from '../AnimationCard';
 
 const {width} = Dimensions.get('window');
 const padding = 10;
@@ -23,7 +23,7 @@ const RenderCard = () => {
   const [boxes, setBoxes] = useState<BoxItem[]>([]);
 
   const addBoxes = () => {
-    if (boxes.length >= 2) {
+    if (boxes.length >= 6) {
       Alert.alert('Nope!');
     } else {
       setBoxes(prevBoxes => [...prevBoxes, {key: prevBoxes.length}]);
@@ -33,7 +33,7 @@ const RenderCard = () => {
   const renderItem = ({item}: {item: BoxItem}) => {
     return (
       <View style={styles.box}>
-        <Animate />
+        <AnimationCard />
       </View>
     );
   };
@@ -43,6 +43,7 @@ const RenderCard = () => {
       <FlatList
         data={boxes}
         renderItem={renderItem}
+        style={{flex: 1}}
         keyExtractor={item => item.key.toString()}
         numColumns={numberOfColumns}
       />
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     marginBottom: padding,
     marginRight: padding,
+    borderWidth: 1,
   },
 });
 
