@@ -50,37 +50,48 @@ const AnimationCard = () => {
       {translateY: withSpring(translateY.value)},
       {scale: withTiming(pressed.value ? 1.1 : 1)},
     ],
-    backgroundColor: pressed.value ? 'orange' : '#265073',
+    backgroundColor: '#0B60B0',
+    borderWidth: 2,
   }));
 
   return (
     <View style={styles.container}>
       <GestureDetector gesture={gesture}>
-        <View style={styles.cardContainer}>
+        <View>
           <Animated.View style={[styles.card, animatedStyles]} />
         </View>
       </GestureDetector>
     </View>
   );
+
+  // return (
+  //   <View style={styles.container}>
+  //     <View style={styles.container}>
+  //       <Animated.View style={[styles.card, animatedStyles]} />
+  //     </View>
+  //   </View>
+  // );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'absolute',
+    // zIndex: 1,
   },
   cardContainer: {
     width: SCREEN_WIDTH / 2, // Divide by the number of columns
     height: SCREEN_HEIGHT / 4, // Divide by the number of rows
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: 'black',
+    zIndex: 1,
   },
   card: {
-    height: 150,
-    width: SCREEN_WIDTH / 2.5,
+    height: SCREEN_HEIGHT / 6,
+    width: SCREEN_WIDTH / 3,
     backgroundColor: '#b58df1',
     borderRadius: 10,
+    // zIndex: 2,
   },
 });
 

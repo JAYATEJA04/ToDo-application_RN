@@ -52,8 +52,8 @@ const Grid: React.FC = () => {
     <GestureDetector gesture={gesture}>
       <View style={styles.container}>
         <View style={styles.row}>
-          {renderSpace(0)}
-          {renderSpace(1)}
+          <AnimationCard />
+          <AnimationCard />
         </View>
         <View collapsable={false} style={styles.row}>
           <View style={styles.space} />
